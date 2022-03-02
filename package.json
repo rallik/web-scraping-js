@@ -1,0 +1,24 @@
+{
+  "name": "web-scraping-js",
+  "version": "1.0.0",
+  "description": "Collection of web scraping tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rallik/web-scraping-js.git"
+  },
+  "keywords": [],
+  "author": "Reuben Allik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rallik/web-scraping-js/issues"
+  },
+  "homepage": "https://github.com/rallik/web-scraping-js#readme",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "cheerio": "^1.0.0-rc.10"
+  }
+}
