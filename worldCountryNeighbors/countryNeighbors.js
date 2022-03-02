@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 
 
+
 const scrapeNeighborData = async () => {
     const url = "https://www.cia.gov/the-world-factbook/field/land-boundaries/";
     const { resp, error } = await getPageDataFromUrl(url);
@@ -43,4 +44,50 @@ const scrapeNeighborData = async () => {
 
 }
 
-scrapeNeighborData()
+
+
+
+const checkValidCountryNames = async () => {
+    const rawData = fs.readFileSync('country-neighbors.json');
+    let adjacencyList = JSON.parse(rawData);
+    // console.log(Object.keys(adjacencyList))
+
+    for (let country in adjacencyList) {
+        const formatCountryForURL = country.replace(' ', '%20')
+        const url = `https://restcountries.com/v3.1/name/${formatCountryForURL}?fullName=true`
+        const { resp, error } = await getPageDataFromUrl(url);
+    
+        if (error === true) {
+            console.log(resp, country);
+        }
+    }
+}
+
+const appendFlagUrlToList = async () => {
+    const updatedObjectWithFlag = {}
+    const rawData = fs.readFileSync('country-neighbors.json');
+    let adjacencyList = JSON.parse(rawData);
+
+    for (let country in adjacencyList) {
+        const formatCountryForURL = country.replace(' ', '%20')
+        const url = `https://restcountries.com/v3.1/name/${formatCountryForURL}?fullName=true`
+        const { resp, error } = await getPageDataFromUrl(url);
+    
+        if (error === true) {
+            console.log(resp, country);
+        } else {
+            updatedObjectWithFlag[country] = {
+                flag: resp[0]?.flags?.png,
+                neighbors: adjacencyList[country]
+            }
+        }
+    }
+    let strigifiedAdjacencyList = JSON.stringify(updatedObjectWithFlag);
+    fs.writeFileSync('country-neighbors-flags.json', strigifiedAdjacencyList);
+}
+
+//Function Calls
+// scrapeNeighborData()
+// checkValidCountryNames();
+
+appendFlagUrlToList();
